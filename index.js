@@ -172,7 +172,7 @@ S3Storage.prototype._handleFile = function (req, file, cb) {
       StorageClass: opts.storageClass,
       ServerSideEncryption: opts.serverSideEncryption,
       SSEKMSKeyId: opts.sseKmsKeyId,
-      Body: (opts.replacementStream || file.stream)
+      Body: (opts.replacementStream || file.buffer || file.stream)
     }
 
     if (opts.contentDisposition) {
@@ -189,6 +189,7 @@ S3Storage.prototype._handleFile = function (req, file, cb) {
       if (err) return cb(err)
 
       cb(null, {
+        buffer: file.buffer,
         size: currentSize,
         bucket: opts.bucket,
         key: opts.key,
